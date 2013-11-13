@@ -1,0 +1,254 @@
+FORMAT: 1A
+HOST: http://www.google.com
+
+# Email Service Interface
+ESI API is a **email service**.
+
+## Authentication
+Currently the ESI API does not provide authenticated access.
+
+## Media Types
+Where applicable this API uses the [JSON](http://www.ietf.org/rfc/rfc4627.txt) media-type to represent resources states.
+
+Requests with a message-body are using plain JSON to set or update resource states.
+
+## Error States
+The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used.
+
+# Group Account
+Account related resources of the **ESI API**
+
+## Account [/accounts/{id}]
+A single Account object. It represents one account configuration.
+
+The Account resource has the following attributes:
+
+- id: Id of the account
+- name (string): account name
+- email_address (string): email address
+- outgoing_server (struct): SMTP server description
+ - server_name (string): address of the server
+ - server_port (number): port number (optional). Default: 25 (none) 465 (ssl/tls)
+ - username (string): username used for authentication
+ - password (string): the password for the account.
+ - connection_security (string): none, SSL/TLS, STARTTLS
+ - authentication_method (string): none, normal, encrypted, kerberos, NTLM
+- incoming_server (struct): 
+ - type (string): imap, pop
+ - server_name (string): address of the server
+ - server_port (number): port number (optional). Default: 143/993 (imap) or 110/995 (pop)
+ - username (string): username used for authentication
+ - password (string): the password for the account.
+ - connection_security (string): none, SSL/TLS, STARTTLS
+ - authentication_method (string): none, normal, encrypted, kerberos, NTLM, TLS certificate
+ - check_timeout (number): check for new messages every X seconds
+ - leave_message (boolean): Leave messages on server until I delete them 
+
+The state _id_ is assigned by the ESI API at the moment of creation.
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Account to perform action with. Has example value.
+
++ Model (application/json)
+
+    JSON representation of Account Resource.
+
+    + Body
+    
+            {
+                "id": "42",
+                "name": "Teste 1",
+                "email_address": "teste@example.com",
+                "outgoing_server":
+                {
+                    "server_name": "smtp.example.com",
+                    "server_port": "465",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connection_security": "SSL/TLS"
+                    "authentication_method": "TLS certificate"
+                },
+                "incoming_server":
+                {
+                    "type": "imap",
+                    "server_name": "imap.example.com.br",
+                    "server_port": "993",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connection_security": "SSL/TLS"
+                    "authentication_method": "TLS certificate",
+                    "check_timeout": "10",
+                    "leave_message": "true"
+                }
+            }
+
+### Retrieve a Single Account [GET]
++ Response 200
+    
+    [Account][]            
+    
+### Edit a Account [PATCH]
+To update a Account send a JSON with updated value for one or more of the Account resource attributes. All attributes values (states) from the previous version of this Account are carried over by default if not included in the hash.
+
++ Request (application/json)
+
+        {
+            "outgoing_server":
+            {
+                "password": "1234"
+            }
+        }
+
++ Response 200
+    
+    [Account][]
+
+### Delete a Account [DELETE]
++ Response 204
+
+## Accounts Collection [/accounts]
+Collections of all Accounts.
+
+The Account Collection resource has the following attribute:
+
+- accounts (array): an array of account information.
+ - id: Id of the account
+ - name (string): account name
+ - email_address (string): email address
+- total (number)
+
++ Model (application/json)
+
+    JSON representation of Account Collection Resource. Note the Account infromation are incomplete representations of the Account in question. Use the respective Account [link](/accounts/{id}) to retrieve its full representation.
+    
+    + Body
+    
+            {
+                "accounts": [
+                    {
+                        "id": "42",
+                        "name": "Teste 1",
+                        "email_address": "teste1@example.com"
+                    }, {
+                        "id": "43",
+                        "name": "Teste 2",
+                        "email_address": "teste2@example.com"
+                    }
+                ],
+                "total": 2
+            }
+
+### List all Accounts [GET]
++ Response 200 (application/json)
+
+    [Accounts Collection][]
+    
+### Create a Account [POST]
+To create a new Account simply provide a JSON with the attributes for the new Account.
+
++ Request (application/json)
+
+            {
+                "name": "Teste 1",
+                "email_address": "teste@example.com",
+                "outgoing_server":
+                {
+                    "server_name": "smtp.example.com",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connection_security": "SSL/TLS"
+                    "authentication_method": "TLS certificate"
+                },
+                "incoming_server":
+                {
+                    "type": "imap",
+                    "server_name": "imap.example.com.br",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connection_security": "SSL/TLS"
+                    "authentication_method": "TLS certificate",
+                    "check_timeout": "10",
+                    "leave_message": "true"
+                }
+            }
+
++ Response 201 (application/json)
+
+        [Account][]
+
+# Group Message
+Message related resources of the **ESI API**
+
+## Message [/messages/{id}]
+A single Message object. It represents an email.
+
+The Message resource has the following attributes:
+
+- id: Id of the account
+- from (struct): an array of recipient information.
+ - email (string): the email address of the recipient. required
+ - name (string): the optional display name to use for the recipient 
+- to (array): an array of recipient information.
+ - email (string): the email address of the recipient. required
+ - name (string): the optional display name to use for the recipient 
+- cc (array): an array of recipient information.
+ - email (string): the email address of the recipient. required
+ - name (string): the optional display name to use for the recipient 
+- bcc (array): an array of recipient information.
+ - email (string): the email address of the recipient. required
+ - name (string): the optional display name to use for the recipient 
+- subject (string): the message subject
+- html (string): the full HTML content to be sent
+- text (string): optional full text content to be sent
+- headers (array): optional extra headers to add to the message (most headers are allowed)
+ - name (string): name of the header
+ - value (string): value of the header 
+- attachments (arrary): an array of attachments information
+ - type (string): the content type of the attachment
+ - name (string): the name of the attachment
+ - content (string): content of the attachment 
+- state(read-only): received, componsing, sending, sent
+- folder: inbox, outbox, draft 
+
+The state _id_ is assigned by the ESI API at the moment of creation.
+
++ Parameters
+    + id (required, string, `BDAF13F99A@example.com`) ... String `id` of the Message to perform action with. Has example value.
+
++ Model (application/json)
+
+    JSON representation of Account Resource.
+
+    + Body
+    
+            { 
+                "from": {
+                    "name": "John",
+                    "email": "john.snaider@nsa.com"
+                },
+                "to": [{
+                    "name": "Joaquim Barbosa,
+                    "email": "joaquim.barbosa@supremo.gov.br"
+                }],
+                "cc”: [{
+                    "name": “Marina Silva",
+                    "email": "marina.silva@rede.org.br"
+                }, {
+                    "name": "Eduardo Campos",
+                    "email": "eduardo.campos@ptb.org.br"
+                }],
+                "subject": "Lula Calls",
+                "attachments": [{
+                    "type": "text/plain",
+                    "name": "myfile.txt",
+                    "content": "ZXhhbXBsZSBmaWxl"
+                }]
+            }
+
+### Retrieve a Single Message [GET]
++ Response 200
+    
+    [Message][]            
+    
+### Delete a Message [DELETE]
++ Response 204
