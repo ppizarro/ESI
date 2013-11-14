@@ -65,7 +65,7 @@ The state _id_ is assigned by the ESI API at the moment of creation.
                     "server_port": "465",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS"
+                    "connection_security": "SSL/TLS",
                     "authentication_method": "TLS certificate"
                 },
                 "incoming_server":
@@ -75,7 +75,7 @@ The state _id_ is assigned by the ESI API at the moment of creation.
                     "server_port": "993",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS"
+                    "connection_security": "SSL/TLS",
                     "authentication_method": "TLS certificate",
                     "check_timeout": "10",
                     "leave_message": "true"
@@ -156,7 +156,7 @@ To create a new Account simply provide a JSON with the attributes for the new Ac
                     "server_name": "smtp.example.com",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS"
+                    "connection_security": "SSL/TLS",
                     "authentication_method": "TLS certificate"
                 },
                 "incoming_server":
@@ -165,7 +165,7 @@ To create a new Account simply provide a JSON with the attributes for the new Ac
                     "server_name": "imap.example.com.br",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS"
+                    "connection_security": "SSL/TLS",
                     "authentication_method": "TLS certificate",
                     "check_timeout": "10",
                     "leave_message": "true"
@@ -213,7 +213,7 @@ The Message resource has the following attributes:
 The state _id_ is assigned by the ESI API at the moment of creation.
 
 + Parameters
-    + id (required, string, `20131113211245.3BDAF13F99A@env010102.example.com`) ... String `id` of the Message to perform action with. Has example value.
+    + id (required, string, `BDAF13F99A@example.com`) ... String `id` of the Message to perform action with. Has example value.
 
 + Model (application/json)
 
