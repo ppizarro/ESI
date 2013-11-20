@@ -25,24 +25,24 @@ The Account resource has the following attributes:
 
 - id: Id of the account
 - name (string): account name
-- email_address (string): email address
-- outgoing_server (struct): SMTP server description
- - server_name (string): address of the server
- - server_port (number): port number (optional). Default: 25 (none) 465 (ssl/tls)
+- emailAddress (string): email address
+- outgoingServer (struct): SMTP server description
+ - serverName (string): address of the server
+ - serverPort (number): port number (optional). Default: 25 (none) 465 (ssl/tls)
  - username (string): username used for authentication
  - password (string): the password for the account.
- - connection_security (string): none, SSL/TLS, STARTTLS
- - authentication_method (string): none, normal, encrypted, kerberos, NTLM
-- incoming_server (struct):
+ - connectionSecurity (string): none, SSL/TLS, STARTTLS
+ - authenticationMethod (string): none, normal, encrypted, kerberos, NTLM
+- incomingServer (struct):
  - type (string): imap, pop
- - server_name (string): address of the server
- - server_port (number): port number (optional). Default: 143/993 (imap) or 110/995 (pop)
+ - serverName (string): address of the server
+ - serverPort (number): port number (optional). Default: 143/993 (imap) or 110/995 (pop)
  - username (string): username used for authentication
  - password (string): the password for the account.
- - connection_security (string): none, SSL/TLS, STARTTLS
- - authentication_method (string): none, normal, encrypted, kerberos, NTLM, TLS certificate
- - check_timeout (number): check for new messages every X seconds
- - leave_message (boolean): Leave messages on server until I delete them
+ - connectionSecurity (string): none, SSL/TLS, STARTTLS
+ - authenticationMethod (string): none, normal, encrypted, kerberos, NTLM, TLS certificate
+ - checkTimeout (number): check for new messages every X seconds
+ - leaveMessage (boolean): Leave messages on server until I delete them
 
 The state _id_ is assigned by the ESI API at the moment of creation.
 
@@ -56,29 +56,29 @@ The state _id_ is assigned by the ESI API at the moment of creation.
     + Body
 
             {
-                "id": "42",
+                "id": "1",
                 "name": "Teste 1",
-                "email_address": "teste@example.com",
-                "outgoing_server":
+                "emailAddress": "teste@example.com",
+                "outgoingServer":
                 {
-                    "server_name": "smtp.example.com",
-                    "server_port": "465",
+                    "serverName": "smtp.example.com",
+                    "serverPort": "465",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS",
-                    "authentication_method": "TLS certificate"
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate"
                 },
-                "incoming_server":
+                "incomingServer":
                 {
                     "type": "imap",
-                    "server_name": "imap.example.com.br",
-                    "server_port": "993",
+                    "serverName": "imap.example.com.br",
+                    "serverPort": "993",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS",
-                    "authentication_method": "TLS certificate",
-                    "check_timeout": "10",
-                    "leave_message": "true"
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate",
+                    "checkTimeout": "10",
+                    "leaveMessage": "true"
                 }
             }
 
@@ -87,21 +87,36 @@ The state _id_ is assigned by the ESI API at the moment of creation.
 
     [Account][]
 
-### Edit a Account [PATCH]
-To update a Account send a JSON with updated value for one or more of the Account resource attributes. All attributes values (states) from the previous version of this Account are carried over by default if not included in the hash.
+### Edit a Account [PUT]
+To update a Account send a JSON with updated value for all the Account resource attributes.
 
 + Request (application/json)
 
-        {
-            "outgoing_server":
             {
-                "password": "1234"
+                "name": "Teste 1",
+                "emailAddress": "teste@example.com",
+                "outgoingServer":
+                {
+                    "serverName": "smtp.example.com",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate"
+                },
+                "incomingServer":
+                {
+                    "type": "imap",
+                    "serverName": "imap.example.com.br",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate",
+                    "checkTimeout": "10",
+                    "leaveMessage": "true"
+                }
             }
-        }
 
-+ Response 200
-
-    [Account][]
++ Response 204
 
 ### Delete a Account [DELETE]
 + Response 204
@@ -114,7 +129,7 @@ The Account Collection resource has the following attribute:
 - accounts (array): an array of account information.
  - id: Id of the account
  - name (string): account name
- - email_address (string): email address
+ - emailAddress (string): email address
 - total (number)
 
 + Model (application/json)
@@ -126,13 +141,13 @@ The Account Collection resource has the following attribute:
             {
                 "accounts": [
                     {
-                        "id": "42",
+                        "id": "1",
                         "name": "Teste 1",
-                        "email_address": "teste1@example.com"
+                        "emailAddress": "teste1@example.com"
                     }, {
-                        "id": "43",
+                        "id": "2",
                         "name": "Teste 2",
-                        "email_address": "teste2@example.com"
+                        "emailAddress": "teste2@example.com"
                     }
                 ],
                 "total": 2
@@ -150,31 +165,56 @@ To create a new Account simply provide a JSON with the attributes for the new Ac
 
             {
                 "name": "Teste 1",
-                "email_address": "teste@example.com",
-                "outgoing_server":
+                "emailAddress": "teste@example.com",
+                "outgoingServer":
                 {
-                    "server_name": "smtp.example.com",
+                    "serverName": "smtp.example.com",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS",
-                    "authentication_method": "TLS certificate"
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate"
                 },
-                "incoming_server":
+                "incomingServer":
                 {
                     "type": "imap",
-                    "server_name": "imap.example.com.br",
+                    "serverName": "imap.example.com.br",
                     "username": "paulo.pizarro",
                     "password": "4567",
-                    "connection_security": "SSL/TLS",
-                    "authentication_method": "TLS certificate",
-                    "check_timeout": "10",
-                    "leave_message": "true"
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate",
+                    "checkTimeout": "10",
+                    "leaveMessage": "true"
                 }
             }
 
 + Response 201 (application/json)
 
-        [Account][]
+            {
+                "id": "1",
+                "name": "Teste 1",
+                "emailAddress": "teste@example.com",
+                "outgoingServer":
+                {
+                    "serverName": "smtp.example.com",
+                    "serverPort": "465",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate"
+                },
+                "incomingServer":
+                {
+                    "type": "imap",
+                    "serverName": "imap.example.com.br",
+                    "serverPort": "993",
+                    "username": "paulo.pizarro",
+                    "password": "4567",
+                    "connectionSecurity": "SSL/TLS",
+                    "authenticationMethod": "TLS certificate",
+                    "checkTimeout": "10",
+                    "leaveMessage": "true"
+                }
+            }
 
 # Group Message
 Message related resources of the **ESI API**
