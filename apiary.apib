@@ -23,26 +23,26 @@ A single Account object. It represents one account configuration.
 
 The Account resource has the following attributes:
 
-- id: Id of the account
-- name (string): account name
-- emailAddress (string): email address
-- outgoingServer (struct): SMTP server description
- - serverName (string): address of the server
+- id: Id of the account. Automatic generate by the system.
+- name (string): account name. Required.
+- emailAddress (string): email address. Required.
+- outgoingServer (struct): SMTP server description. Optional.
+ - serverName (string): address of the server. Required.
  - serverPort (number): port number (optional). Default: 25 (none) 465 (ssl/tls)
- - username (string): username used for authentication
- - password (string): the password for the account.
- - connectionSecurity (string): none, SSL/TLS, STARTTLS
- - authenticationMethod (string): none, normal, encrypted, kerberos, NTLM
-- incomingServer (struct):
- - type (string): imap, pop
- - serverName (string): address of the server
+ - username (string): username used for authentication. Optional.
+ - password (string): the password for the account. Optional.
+ - connectionSecurity (string): none, SSL/TLS, STARTTLS. Optional. Default: none
+ - authenticationMethod (string): none, normal, encrypted, kerberos, NTLM. Optional. Default: normal
+- incomingServer (struct): Incoming server. Optional.
+ - type (string): imap, pop. Optional. Default: pop
+ - serverName (string): address of the server. Required.
  - serverPort (number): port number (optional). Default: 143/993 (imap) or 110/995 (pop)
- - username (string): username used for authentication
- - password (string): the password for the account.
- - connectionSecurity (string): none, SSL/TLS, STARTTLS
- - authenticationMethod (string): none, normal, encrypted, kerberos, NTLM, TLS certificate
- - checkTimeout (number): check for new messages every X seconds
- - leaveMessage (boolean): Leave messages on server until I delete them
+ - username (string): username used for authentication. Optional
+ - password (string): the password for the account. Optional
+ - connectionSecurity (string): none, SSL/TLS, STARTTLS. Optional. Default: none
+ - authenticationMethod (string): none, normal, encrypted, kerberos, NTLM, TLS certificate. Optional. Default: normal
+ - checkTimeout (number): check for new messages every X seconds. Optional. Default: 60 segundos
+ - leaveMessage (boolean): Leave messages on server until I delete them. Optional. Default: true (imap), false (pop)
 
 The state _id_ is assigned by the ESI API at the moment of creation.
 
@@ -88,7 +88,7 @@ The state _id_ is assigned by the ESI API at the moment of creation.
     [Account][]
 
 ### Edit a Account [PUT]
-To update a Account send a JSON with updated value for all the Account resource attributes.
+Overwrite a complete Account. To update a Account send a JSON with updated value for all the Account resource attributes.
 
 + Request (application/json)
 
